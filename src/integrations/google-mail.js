@@ -7,4 +7,5 @@ clockifyButton.render('div.nH.V8djrc.byY > div.nH > div.ha:not(.clockify)', {obs
     link.style.marginLeft = '20px';
     link.style.fontSize = '14px';
     elem.appendChild(link);
+    link.click();
 });
