@@ -143,7 +143,7 @@ function messageHandler(event) {
             this.sendWebSocketEventToExtension(event.data);
             break;
     }
-};
+}
 
 function sendWebSocketEventToExtension(event) {
     aBrowser.runtime.sendMessage({eventName: event});
@@ -206,5 +206,5 @@ function getReconnectTimeout() {
     const max = 15 * 1000;
 
     return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+}
 

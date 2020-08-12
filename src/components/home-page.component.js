@@ -98,7 +98,7 @@ class HomePage extends React.Component {
     getEntryFromPomodoroEvents() {
         getBrowser().runtime.onMessage.addListener((request, sender, sendResponse) => {
             if (request.eventName === 'pomodoroEvent') {
-                this.start.setTimeEntryInProgress(request.timeEntry);
+                this.start.getTimeEntryInProgress();
             }
         });
     }
@@ -464,6 +464,11 @@ class HomePage extends React.Component {
                         getBrowser().extension.getBackgroundPage().removeIdleListenerIfIdleIsEnabled();
                         getBrowser().extension.getBackgroundPage().entryInProgressChangedEventHandler(null);
                     }
+                    this.setState({
+                        page: 0
+                    }, () => {
+                        this.getWorkspaceSettings();
+                    });
                     timeEntryService.createEntry(
                         timeEntry.description,
                         moment(),
@@ -474,11 +479,11 @@ class HomePage extends React.Component {
                         timeEntry.billable
                     ).then(response => {
                         let data = response.data;
+                        this.start.getTimeEntryInProgress();
                         if (isAppTypeExtension()) {
                             getBrowser().extension.getBackgroundPage().addIdleListenerIfIdleIsEnabled();
                             getBrowser().extension.getBackgroundPage().entryInProgressChangedEventHandler(data);
                         }
-                        this.handleRefresh();
                     }).catch(() => {});
                 })
                 .catch(() => {
@@ -565,12 +570,12 @@ class HomePage extends React.Component {
                     timeEntry.billable
                 ).then(response => {
                     let data = response.data;
+                    this.start.getTimeEntryInProgress();
                     if (isAppTypeExtension()) {
                         getBrowser().extension.getBackgroundPage().addIdleListenerIfIdleIsEnabled();
                         getBrowser().extension.getBackgroundPage().addPomodoroTimer();
                         getBrowser().extension.getBackgroundPage().entryInProgressChangedEventHandler(data);
                     }
-                    this.handleRefresh();
                     this.application.setIcon(getIconStatus().timeEntryStarted);
                 }).catch(() => {});
             }
